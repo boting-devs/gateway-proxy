@@ -281,7 +281,8 @@ pub async fn handle_client<S: 'static + AsyncRead + AsyncWrite + Unpin + Send>(
                         0,
                     )));
 
-                    let _res = sender.send(identify.d.compress);
+                    // let _res = sender.send(identify.d.compress);
+                    let _res = sender.send(Some(false));
                 }
             }
             6 => {
