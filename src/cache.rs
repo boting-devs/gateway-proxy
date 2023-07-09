@@ -118,15 +118,7 @@ impl Guilds {
         let member = self.0.member(guild_id, user_id)?;
 
         Some(Member {
-            avatar: member.avatar(),
             communication_disabled_until: member.communication_disabled_until(),
-            deaf: member.deaf().unwrap_or_default(),
-            flags: member.flags(),
-            joined_at: member.joined_at(),
-            mute: member.mute().unwrap_or_default(),
-            nick: member.nick().map(ToString::to_string),
-            pending: member.pending(),
-            premium_since: member.premium_since(),
             roles: member.roles().to_vec(),
             user: self.0.user(member.user_id())?.value().clone(),
         })
