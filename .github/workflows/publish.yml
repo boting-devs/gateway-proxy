@@ -27,10 +27,16 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t gateway-proxy:${{ matrix.target-cpu }} --build-arg TARGET_CPU=${{ matrix.target-cpu }} .
+          docker build -t gateway-proxy:${{ matrix.target-cpu }} -t gateway-proxy:${{ github.ref_name }}-${{ matrix.target-cpu }} --build-arg TARGET_CPU=${{ matrix.target-cpu }} .
 
       - name: Create manifest and push it
         if: github.ref == 'refs/heads/main'
         run: |
           docker tag gateway-proxy:${{ matrix.target-cpu }} ghcr.io/${REPO}:${{ matrix.target-cpu }}
           docker push ghcr.io/${REPO}:${{ matrix.target-cpu }}
+
+      - name: Create manifest and push it (branch)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          docker tag gateway-proxy:${{ github.ref_name }}-${{ matrix.target-cpu }} ghcr.io/${REPO}:${{ github.ref_name }}-${{ matrix.target-cpu }}
+          docker push ghcr.io/${REPO}:${{ github.ref_name }}-${{ matrix.target-cpu }}
