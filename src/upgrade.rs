@@ -24,7 +24,7 @@ const GUID: &str = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 /// This method is one of two parts in the communication between server
 /// and client where zlib-stream compression may be requested.
 pub async fn server(addr: SocketAddr, mut request: Request<Body>, state: State) -> Response<Body> {
-    let uri = request.uri();
+    // let uri = request.uri();
     // let query = uri.query();
 
     // Track whether the client requested zlib encoding in the query

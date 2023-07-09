@@ -7,13 +7,12 @@ use serde_json::Value as OwnedValue;
 use simd_json::OwnedValue;
 use twilight_cache_inmemory::{InMemoryCache, InMemoryCacheStats, UpdateCache};
 use twilight_model::{
-    channel::{message::Sticker, Channel, StageInstance},
+    channel::Channel,
     gateway::{
         payload::incoming::{GuildCreate, GuildDelete},
-        presence::{Presence, UserOrId},
         OpCode,
     },
-    guild::{Emoji, Guild, Member, Role},
+    guild::{Guild, Member, Role},
     id::{
         marker::{GuildMarker, UserMarker},
         Id,
@@ -115,57 +114,6 @@ impl Guilds {
             .unwrap_or_default()
     }
 
-    fn presences_in_guild(&self, guild_id: Id<GuildMarker>) -> Vec<Presence> {
-        self.0
-            .guild_presences(guild_id)
-            .map(|reference| {
-                reference
-                    .iter()
-                    .filter_map(|user_id| {
-                        let presence = self.0.presence(guild_id, *user_id)?;
-
-                        Some(Presence {
-                            activities: presence.activities().to_vec(),
-                            client_status: presence.client_status().clone(),
-                            guild_id: presence.guild_id(),
-                            status: presence.status(),
-                            user: UserOrId::UserId {
-                                id: presence.user_id(),
-                            },
-                        })
-                    })
-                    .collect()
-            })
-            .unwrap_or_default()
-    }
-
-    fn emojis_in_guild(&self, guild_id: Id<GuildMarker>) -> Vec<Emoji> {
-        self.0
-            .guild_emojis(guild_id)
-            .map(|reference| {
-                reference
-                    .iter()
-                    .filter_map(|emoji_id| {
-                        let emoji = self.0.emoji(*emoji_id)?;
-
-                        Some(Emoji {
-                            animated: emoji.animated(),
-                            available: emoji.available(),
-                            id: emoji.id(),
-                            managed: emoji.managed(),
-                            name: emoji.name().to_string(),
-                            require_colons: emoji.require_colons(),
-                            roles: emoji.roles().to_vec(),
-                            user: emoji
-                                .user_id()
-                                .and_then(|id| self.0.user(id).map(|user| user.value().clone())),
-                        })
-                    })
-                    .collect()
-            })
-            .unwrap_or_default()
-    }
-
     fn member(&self, guild_id: Id<GuildMarker>, user_id: Id<UserMarker>) -> Option<Member> {
         let member = self.0.member(guild_id, user_id)?;
 
@@ -203,50 +151,6 @@ impl Guilds {
                 reference
                     .iter()
                     .filter_map(|role_id| Some(self.0.role(*role_id)?.value().resource().clone()))
-                    .collect()
-            })
-            .unwrap_or_default()
-    }
-
-    fn stage_instances_in_guild(&self, guild_id: Id<GuildMarker>) -> Vec<StageInstance> {
-        self.0
-            .guild_stage_instances(guild_id)
-            .map(|reference| {
-                reference
-                    .iter()
-                    .filter_map(|stage_id| {
-                        Some(self.0.stage_instance(*stage_id)?.value().resource().clone())
-                    })
-                    .collect()
-            })
-            .unwrap_or_default()
-    }
-
-    fn stickers_in_guild(&self, guild_id: Id<GuildMarker>) -> Vec<Sticker> {
-        self.0
-            .guild_stickers(guild_id)
-            .map(|reference| {
-                reference
-                    .iter()
-                    .filter_map(|sticker_id| {
-                        let sticker = self.0.sticker(*sticker_id)?;
-
-                        Some(Sticker {
-                            available: sticker.available(),
-                            description: Some(sticker.description().to_string()),
-                            format_type: sticker.format_type(),
-                            guild_id: Some(sticker.guild_id()),
-                            id: sticker.id(),
-                            kind: sticker.kind(),
-                            name: sticker.name().to_string(),
-                            pack_id: sticker.pack_id(),
-                            sort_value: sticker.sort_value(),
-                            tags: sticker.tags().to_string(),
-                            user: sticker
-                                .user_id()
-                                .and_then(|id| self.0.user(id).map(|user| user.value().clone())),
-                        })
-                    })
                     .collect()
             })
             .unwrap_or_default()
@@ -323,64 +227,23 @@ impl Guilds {
                 }
             } else {
                 let guild_channels = self.channels_in_guild(guild.id());
-                let presences = self.presences_in_guild(guild.id());
-                let emojis = self.emojis_in_guild(guild.id());
                 let members = self.members_in_guild(guild.id());
                 let roles = self.roles_in_guild(guild.id());
-                let stage_instances = self.stage_instances_in_guild(guild.id());
-                let stickers = self.stickers_in_guild(guild.id());
                 let voice_states = self.voice_states_in_guild(guild.id());
                 let threads = self.threads_in_guild(guild.id());
 
                 let new_guild = Guild {
-                    afk_channel_id: guild.afk_channel_id(),
-                    afk_timeout: guild.afk_timeout(),
-                    application_id: guild.application_id(),
-                    approximate_member_count: None, // Only present in with_counts HTTP endpoint
-                    banner: guild.banner().map(ToOwned::to_owned),
-                    approximate_presence_count: None, // Only present in with_counts HTTP endpoint
                     channels: guild_channels,
-                    default_message_notifications: guild.default_message_notifications(),
-                    description: guild.description().map(ToString::to_string),
-                    discovery_splash: guild.discovery_splash().map(ToOwned::to_owned),
-                    emojis,
-                    explicit_content_filter: guild.explicit_content_filter(),
-                    features: guild.features().cloned().collect(),
-                    icon: guild.icon().map(ToOwned::to_owned),
                     id: guild.id(),
-                    joined_at: guild.joined_at(),
-                    large: guild.large(),
-                    max_members: guild.max_members(),
-                    max_presences: guild.max_presences(),
-                    max_video_channel_users: None, // Not in the cache model
                     member_count: guild.member_count(),
                     members,
-                    mfa_level: guild.mfa_level(),
                     name: guild.name().to_string(),
-                    nsfw_level: guild.nsfw_level(),
                     owner_id: guild.owner_id(),
-                    owner: guild.owner(),
                     permissions: guild.permissions(),
-                    public_updates_channel_id: guild.public_updates_channel_id(),
-                    preferred_locale: guild.preferred_locale().to_string(),
-                    premium_progress_bar_enabled: guild.premium_progress_bar_enabled(),
-                    premium_subscription_count: guild.premium_subscription_count(),
-                    premium_tier: guild.premium_tier(),
-                    presences,
                     roles,
-                    rules_channel_id: guild.rules_channel_id(),
-                    splash: guild.splash().map(ToOwned::to_owned),
-                    stage_instances,
-                    stickers,
-                    system_channel_flags: guild.system_channel_flags(),
-                    system_channel_id: guild.system_channel_id(),
                     threads,
                     unavailable: false,
-                    vanity_url_code: guild.vanity_url_code().map(ToString::to_string),
-                    verification_level: guild.verification_level(),
                     voice_states,
-                    widget_channel_id: guild.widget_channel_id(),
-                    widget_enabled: guild.widget_enabled(),
                 };
 
                 let guild_create = GuildCreate(new_guild);

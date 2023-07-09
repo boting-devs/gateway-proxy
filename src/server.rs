@@ -218,7 +218,9 @@ pub async fn handle_client<S: 'static + AsyncRead + AsyncWrite + Unpin + Send>(
         #[cfg(not(feature = "simd-json"))]
         let payload = unsafe { String::from_utf8_unchecked(data) };
 
-        let Some(deserializer) = GatewayEvent::from_json(&payload) else { continue };
+        let Some(deserializer) = GatewayEvent::from_json(&payload) else {
+            continue;
+        };
 
         match deserializer.op() {
             1 => {
