@@ -1259,7 +1259,7 @@ dependencies = [
 [[package]]
 name = "twilight-cache-inmemory"
 version = "0.15.2"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "bitflags 2.3.1",
  "dashmap",
@@ -1270,7 +1270,7 @@ dependencies = [
 [[package]]
 name = "twilight-gateway"
 version = "0.15.2"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "bitflags 2.3.1",
  "flate2",
@@ -1291,7 +1291,7 @@ dependencies = [
 [[package]]
 name = "twilight-gateway-queue"
 version = "0.15.2"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "tokio",
  "tracing",
@@ -1301,7 +1301,7 @@ dependencies = [
 [[package]]
 name = "twilight-http"
 version = "0.15.2"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "hyper",
  "hyper-rustls",
@@ -1320,7 +1320,7 @@ dependencies = [
 [[package]]
 name = "twilight-http-ratelimiting"
 version = "0.15.1"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "futures-util",
  "tokio",
@@ -1330,7 +1330,7 @@ dependencies = [
 [[package]]
 name = "twilight-model"
 version = "0.15.2"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "bitflags 2.3.1",
  "serde",
@@ -1343,7 +1343,7 @@ dependencies = [
 [[package]]
 name = "twilight-validate"
 version = "0.15.1"
-source = "git+https://github.com/boting-devs/twilight-vibr.git?branch=vibr#ca94b38e9e3b47ab80c41b4f99fc67b008300bbc"
+source = "git+https://github.com/boting-devs/twilight.git?branch=vibr#cc0b6d2480da8159eb83a314d9cdba29357b9a1d"
 dependencies = [
  "twilight-model",
 ]
