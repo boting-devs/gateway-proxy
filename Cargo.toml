@@ -39,17 +39,17 @@ tracing-subscriber = { version = "0.3", default-features = false, features = [
     "fmt",
     "std",
 ] }
-twilight-cache-inmemory = { git = "https://github.com/boting-devs/twilight-vibr.git", branch = "vibr", default-features = false }
-twilight-gateway = { git = "https://github.com/boting-devs/twilight-vibr.git", branch = "vibr", default-features = false, features = [
+twilight-cache-inmemory = { git = "https://github.com/boting-devs/twilight.git", branch = "vibr", default-features = false }
+twilight-gateway = { git = "https://github.com/boting-devs/twilight.git", branch = "vibr", default-features = false, features = [
     "rustls-webpki-roots",
 ] }
-twilight-gateway-queue = { git = "https://github.com/boting-devs/twilight-vibr.git", branch = "vibr", default-features = false, features = [
+twilight-gateway-queue = { git = "https://github.com/boting-devs/twilight.git", branch = "vibr", default-features = false, features = [
     "twilight-http",
 ] }
-twilight-http = { git = "https://github.com/boting-devs/twilight-vibr.git", branch = "vibr", default-features = false, features = [
+twilight-http = { git = "https://github.com/boting-devs/twilight.git", branch = "vibr", default-features = false, features = [
     "rustls-webpki-roots",
 ] }
-twilight-model = { git = "https://github.com/boting-devs/twilight-vibr.git", branch = "vibr" }
+twilight-model = { git = "https://github.com/boting-devs/twilight.git", branch = "vibr" }
 
 [features]
 default = ["simd"]
